@@ -1,4 +1,4 @@
-name: Deploy App  Oracle DB
+name: Deploy Oracle Database
 
 on:
   push:
@@ -6,20 +6,28 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-    - name: Build and Deploy
-      env:
-        ORACLE_USER: ${{ secrets.ORACLE_USER }}
-        ORACLE_PASSWORD: ${{ secrets.ORACLE_PASSWORD }}
-        ##ORACLE_CONNECTION_STRING: ${{ secrets.ORACLE_CONNECTION_STRING }}
-      run: |
-        
-    - name: Deploy Application
-      run: |
-       
+      - name: Set up Oracle SQLcl
+        uses: gvenzl/setup-oracle-sqlcl@v1
+        with:
+          sqlcl-version: '20.3' # Reemplaza con la versión de SQLcl que deseas usar
+
+      - name: Connect to Oracle Database
+        run: |
+          # Aqui se configurar  las credenciales para 
+          # Por ejemplo, puedes crear tablas, cargar datos u otros comandos SQL necesarios para tu despliegue.
+          sql -S jair-/123123@hostname:5234/service @path/to/your/sql/script.sql
+
+      - name: Database Deployed
+        run: |
+          # Puedes agregar comandos adicionales o notificaciones según tus necesidades.
+          uses: gymshark/slack-notifier-action@v1.0.2
+      - with:
+        webhook_url: 'https://hooks.slack.com/services/ABC123/def456'
+          
